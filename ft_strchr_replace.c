@@ -35,8 +35,8 @@ char	*ft_strchr_replace(char *str, char needle, char *stuffing)
 	char	*strres;
 
 	j = 0;
-	strres = malloc(sizeof(char) * (ft_strlen(str)
-				+ (ft_strlen(stuffing) * needle_in_str(str, needle)) + 2));
+	strres = malloc((ft_strlen(str) + ((ft_strlen(stuffing) - 1)
+					* needle_in_str(str, needle)) + 2));
 	if (!strres)
 		return (NULL);
 	k = 0;
