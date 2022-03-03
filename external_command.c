@@ -44,7 +44,6 @@ char	**path_parsing(char **envp)
 
 	pline = findpathline(envp);
 	path_from_envp = ft_substr(envp[pline], 5, ft_strlen(envp[pline]) - 5);
-	//printf ("pathline without \"PATH=\" is \"%s\"\n", path_from_envp);
 	path_transformed = ft_strchr_replace(path_from_envp, ':', "/:");
 	mypaths = ft_split(path_transformed, ':');
 	return (mypaths);
@@ -52,7 +51,6 @@ char	**path_parsing(char **envp)
 
 int	externalcommand(char *cmd, char **envp)
 {
-	perror("doing command ");
 	int		i;
 	char	*cmdpath;
 	char	**mypaths;
@@ -61,17 +59,15 @@ int	externalcommand(char *cmd, char **envp)
 	mypaths = path_parsing(envp);
 	cmdargs = ft_split(cmd, ' ');
 	i = -1;
-	perror("doing command ");
 	while (mypaths[++i])
 	{
-		cmdpath = ft_strjoin(mypaths[i], cmdargs[0]); // to be protected
-		//access(cmdpath, X_OK | F_OK); // to check if command is accessible and executable
-		//perror("Error");
-		execve(cmdpath, cmdargs, envp); //if execve succeeds, it exits
-		//perror("Error");
-		perror("doing command ");
-		free(cmdpath); //if execve fails, we free and start again;
+		cmdpath = ft_strjoin(mypaths[i], cmdargs[0]);
+		if (access(cmdpath, X_OK | F_OK) == 0)
+			execve(cmdpath, cmdargs, envp);
+		free(cmdpath);
 	}
-	perror("Error");
-	return (EXIT_FAILURE);
+	write(2, "pipex: ", 7);
+	write(2, " command not found: \n", 20);
+	write(2, cmd, ft_strlen(cmd));
+	exit (127);
 }
