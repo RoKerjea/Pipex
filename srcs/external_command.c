@@ -53,7 +53,7 @@ char	*path_parsing(char *cmd, char **envp)
 		if (access(cmdpath, X_OK | F_OK) == 0)
 		{
 			free(mypaths);
-			return(cmdpath);
+			return (cmdpath);
 		}
 		free(cmdpath);
 	}
