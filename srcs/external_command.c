@@ -35,43 +35,44 @@ int	findpathline(char **envp)
 	return (EXIT_FAILURE);
 }
 
-char	**path_parsing(char **envp)
+char	*path_parsing(char *cmd, char **envp)
 {
 	char	*path_from_envp;
-	char	*path_transformed;
+	char	*cmdpath;
 	char	**mypaths;
-	int		pline;
+	int		i;
 
-	pline = findpathline(envp);
-	path_from_envp = ft_substr(envp[pline], 5, ft_strlen(envp[pline]) - 5);
-	path_transformed = ft_strchr_replace(path_from_envp, ':', "/:");
-	mypaths = ft_split(path_transformed, ':');
+	i = findpathline(envp);
+	path_from_envp = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5);
+	mypaths = ft_split(ft_strchr_replace(path_from_envp, ':', "/:"), ':');
 	free(path_from_envp);
-	free(path_transformed);
-	return (mypaths);
+	i = -1;
+	while (mypaths[++i])
+	{
+		cmdpath = ft_strjoin(mypaths[i], cmd);
+		if (access(cmdpath, X_OK | F_OK) == 0)
+		{
+			free(mypaths);
+			return(cmdpath);
+		}
+		free(cmdpath);
+	}
+	free(mypaths);
+	return (NULL);
 }
 
 int	externalcommand(char *cmd, char **envp)
 {
-	int		i;
 	char	*cmdpath;
-	char	**mypaths;
 	char	**cmdargs;
 
 	cmdargs = ft_split(cmd, ' ');
 	if (cmdargs[0][0] == '/')
 		execve(cmdargs[0], cmdargs, envp);
-	mypaths = path_parsing(envp);
-	i = -1;
-	while (mypaths[++i])
-	{
-		cmdpath = ft_strjoin(mypaths[i], cmdargs[0]);
-		if (access(cmdpath, X_OK | F_OK) == 0)
-			execve(cmdpath, cmdargs, envp);
-		free(cmdpath);
-	}
+	cmdpath = path_parsing(cmdargs[0], envp);
+	execve(cmdpath, cmdargs, envp);
+	free(cmdpath);
 	free(cmdargs);
-	free(mypaths);
 	write(2, "pipex: ", 7);
 	write(2, " command not found: \n", 20);
 	write(2, cmd, ft_strlen(cmd));
