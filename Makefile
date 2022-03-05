@@ -1,14 +1,16 @@
-SRCS	= main_pipex.c ft_strjoin.c ft_strlen.c ft_substr.c 
+SRCS	= main_pipex.c ft_strjoin.c ft_substr.c 
 SRCS	:= $(SRCS) ft_strchr_replace.c ft_split.c external_command.c
 HEAD	= pipex.h
 RM		= rm -rf
 NAME	= pipex
 CC 		= gcc
 OBJECTS	= ${SRCS:.c=.o}
+PRINTER	= PrintError/libftprintf.a
 CFLAGS	= -Wall -Werror -Wextra
 
 ${NAME}:	${HEAD} ${OBJECTS} 
-	${CC} ${CFLAGS} -o ${NAME} ${OBJECTS}
+	$(MAKE) -C PrintError
+	${CC} ${CFLAGS} -o ${NAME} ${OBJECTS} ${PRINTER}
 
 all:		${NAME}
 
@@ -17,8 +19,11 @@ all:		${NAME}
 
 clean:		
 	${RM} ${OBJECTS}
+	$(MAKE) -C PrintError fclean
 
-fclean:		clean 
+fclean:
+	${RM} ${OBJECTS}
+	$(MAKE) -C PrintError fclean
 	${RM} ${NAME} 
 
 re:			fclean all
