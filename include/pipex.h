@@ -6,7 +6,7 @@
 /*   By: rokerjea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 12:32:25 by rokerjea          #+#    #+#             */
-/*   Updated: 2022/02/24 12:32:27 by rokerjea         ###   ########.fr       */
+/*   Updated: 2022/03/05 19:00:31 by rokerjea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strchr_replace(char *str, char needle, char *stuffing);
 int				externalcommand(char *cmd, char **envp);
-char			**path_parsing(char **envp);
+char			*path_parsing(char *cmd, char **envp);
 int				findpathline(char **envp);
 
 #endif
