@@ -1,16 +1,15 @@
-SRCS	= main_pipex.c ft_strjoin.c ft_substr.c 
-SRCS	:= $(SRCS) ft_strchr_replace.c ft_split.c external_command.c
-HEAD	= pipex.h
-RM		= rm -rf
-NAME	= pipex
-CC 		= gcc
-OBJECTS	= ${SRCS:.c=.o}
-PRINTER	= PrintError/libftprintf.a
-CFLAGS	= -Wall -Werror -Wextra
+SRCS		= srcs/pipex.c srcs/external_command.c
+LIB			= pipelib/ft_strjoin.c pipelib/ft_strlen.c pipelib/ft_substr.c 
+LIB			:= $(LIB) pipelib/ft_strchr_replace.c pipelib/ft_split.c
+HEADER		= include/pipex.h
+RM			= rm -rf
+NAME		= pipex
+CC			= gcc
+OBJECTS		= ${SRCS:.c=.o} ${LIB:.c=.o}
+CFLAGS		= -Wall -Werror -Wextra
 
-${NAME}:	${HEAD} ${OBJECTS} 
-	$(MAKE) -C PrintError
-	${CC} ${CFLAGS} -o ${NAME} ${OBJECTS} ${PRINTER}
+${NAME}:	${HEAD} ${OBJECTS}
+	${CC} ${CFLAGS} -o ${NAME} ${OBJECTS}
 
 all:		${NAME}
 
@@ -18,14 +17,27 @@ all:		${NAME}
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:		
-	${RM} ${OBJECTS}
-	$(MAKE) -C PrintError fclean
+	${RM} ${OBJECTS} ${OBJECTSB}
 
 fclean:
-	${RM} ${OBJECTS}
-	$(MAKE) -C PrintError fclean
-	${RM} ${NAME} 
+	${RM} ${OBJECTS} ${OBJECTSB}
+	${RM} ${NAME} ${NAMEB}
 
 re:			fclean all
 
-.PHONY:		all clean fclean re
+# ================================ #
+# ========== MAKE BONUS ========== #
+# ================================ #
+
+NAMEB		= pipexbonus
+SRCSB		= srcs/pipex_bonus.c srcs/external_command.c
+OBJECTSB	= ${SRCSB:.c=.o} ${LIB:.c=.o}
+
+${NAMEB}:	${OBJECTSB} 
+			${CC} ${CFLAGS} -o ${NAMEB} ${OBJECTSB}
+
+bonus:		${NAMEB}
+
+reb:		fclean bonus
+
+.PHONY:		all clean fclean re bonus reb
