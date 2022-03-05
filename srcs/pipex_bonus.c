@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rokerjea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -50,16 +50,16 @@ int	main(int argc, char **argv, char **envp)
 		write(1, "Program need 4 arguments\n", 25);
 		return (EXIT_FAILURE);
 	}
+	filefd[0] = open(argv[1], O_RDONLY);
+	filefd[1] = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	if (access(argv[1], F_OK))
 	{
 		write(STDERR_FILENO, "pipex: ", 7);
 		write(STDERR_FILENO, argv[1], ft_strlen(argv[1]));
 		write(STDERR_FILENO, ": No such file or directory\n", 28);
-		return (0);
+		filefd[0] = 0;
 	}
-	filefd[0] = open(argv[1], O_RDONLY);
-	filefd[1] = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC,
-			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	if (filefd[0] < 0 || filefd[1] < 0)
 		return (EXIT_FAILURE);
 	multi_pipex(filefd, argc, argv, envp);

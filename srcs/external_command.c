@@ -48,6 +48,17 @@ void	freetab(char **tab)
 	free(tab);
 }
 
+char	*getpath(char *cmd, char **envp)
+{
+	char	*path;
+
+	if (ft_strchr(cmd, '/'))
+		path = cmd;
+	else
+		path = path_parsing(cmd, envp);
+	return (path);
+}
+
 char	*path_parsing(char *cmd, char **envp)
 {
 	char	*path_from_envp;
@@ -83,15 +94,14 @@ int	externalcommand(char *cmd, char **envp)
 	char	**cmdargs;
 
 	cmdargs = ft_split(cmd, ' ');
-	if (cmdargs[0][0] == '/')
-		execve(cmdargs[0], cmdargs, envp);
-	cmdpath = path_parsing(cmdargs[0], envp);
+	cmdpath = getpath(cmdargs[0], envp);
 	if (cmdpath != NULL)
 		execve(cmdpath, cmdargs, envp);
 	free(cmdpath);
 	write(2, "pipex: ", 7);
-	write(2, " command not found: \n", 20);
+	write(2, " command not found: ", 20);
 	write(2, cmdargs[0], ft_strlen(cmdargs[0]));
+	write(2, "\n", 1);
 	freetab(cmdargs);
 	exit (127);
 }
