@@ -48,9 +48,9 @@ char	**path_parsing(char **envp)
 	mypaths = ft_split(path_transformed, ':');
 	if (!path_from_envp || !path_transformed || !mypaths)
 	{
-	free(path_from_envp);
-	free(path_transformed);
-	return (NULL);
+		free(path_from_envp);
+		free(path_transformed);
+		return (NULL);
 	}	
 	free(path_from_envp);
 	free(path_transformed);
