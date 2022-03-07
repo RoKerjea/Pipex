@@ -1,6 +1,6 @@
 SRCS		= srcs/pipex.c srcs/external_command.c
 LIB			= pipelib/ft_strjoin.c pipelib/ft_strlen.c pipelib/ft_substr.c 
-LIB			:= $(LIB) pipelib/ft_strchr_replace.c pipelib/ft_split.c
+LIB			:= $(LIB) pipelib/ft_strchr_replace.c pipelib/ft_split.c pipelib/ft_strchr.c
 HEADER		= include/pipex.h
 RM			= rm -rf
 NAME		= pipex
