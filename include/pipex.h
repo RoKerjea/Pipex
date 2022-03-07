@@ -17,6 +17,8 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <string.h>
+# include <errno.h>
 
 unsigned long	ft_strlen(const char *s);
 char			**ft_split(char const *s, char c);
@@ -27,5 +29,7 @@ int				ft_strchr(const char *s, char t);
 int				externalcommand(char *cmd, char **envp);
 char			*path_parsing(char *cmd, char **envp);
 int				findpathline(char **envp);
+void			printerror(char **argv, char *prob);
+void			ft_freetab(char **tab);
 
 #endif

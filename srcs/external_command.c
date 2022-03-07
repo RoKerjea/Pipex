@@ -31,21 +31,8 @@ int	findpathline(char **envp)
 		}
 		i++;
 	}
-	perror("env has been tampered, can't find \"PATH=...\" line\n");
-	return (EXIT_FAILURE);
-}
-
-void	freetab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
+	write(STDERR_FILENO, "env problem, can't find \"PATH=...\" line\n", 41);
+	exit (EXIT_FAILURE);
 }
 
 char	*getpath(char *cmd, char **envp)
@@ -79,13 +66,27 @@ char	*path_parsing(char *cmd, char **envp)
 		cmdpath = ft_strjoin(mypaths[i], cmd);
 		if (access(cmdpath, X_OK | F_OK) == 0)
 		{
-			freetab(mypaths);
+			ft_freetab(mypaths);
 			return (cmdpath);
 		}
 		free(cmdpath);
 	}
-	freetab(mypaths);
+	ft_freetab(mypaths);
 	return (NULL);
+}
+
+int	testcmd(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i] == ' ' || cmd[i] == '\0')
+	{
+		if (cmd[i] == '\0')
+			return (EXIT_FAILURE);
+		i++;
+	}
+	return (EXIT_SUCCESS);
 }
 
 int	externalcommand(char *cmd, char **envp)
@@ -93,15 +94,19 @@ int	externalcommand(char *cmd, char **envp)
 	char	*cmdpath;
 	char	**cmdargs;
 
-	cmdargs = ft_split(cmd, ' ');
-	cmdpath = getpath(cmdargs[0], envp);
-	if (cmdpath != NULL)
-		execve(cmdpath, cmdargs, envp);
-	free(cmdpath);
-	write(2, "pipex: ", 7);
-	write(2, " command not found: ", 20);
-	write(2, cmdargs[0], ft_strlen(cmdargs[0]));
+	if (cmd[0] == '\0')
+		exit(EXIT_FAILURE);
+	if (testcmd(cmd) == EXIT_SUCCESS)
+	{
+		cmdargs = ft_split(cmd, ' ');
+		cmdpath = getpath(cmdargs[0], envp);
+		if (cmdpath != NULL)
+			execve(cmdpath, cmdargs, envp);
+		free(cmdpath);
+		ft_freetab(cmdargs);
+	}
+	write(2, "pipex: command not found: ", 26);
+	write(2, cmd, ft_strlen(cmd));
 	write(2, "\n", 1);
-	freetab(cmdargs);
 	exit (127);
 }

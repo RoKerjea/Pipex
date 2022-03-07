@@ -1,12 +1,12 @@
-SRCS		= srcs/pipex.c srcs/external_command.c
-LIB			= pipelib/ft_strjoin.c pipelib/ft_strlen.c pipelib/ft_substr.c 
+SRCS		= srcs/pipex.c srcs/external_command.c srcs/printerror.c
+LIB			= pipelib/ft_strjoin.c pipelib/ft_strlen.c pipelib/ft_substr.c pipelib/ft_freetab.c
 LIB			:= $(LIB) pipelib/ft_strchr_replace.c pipelib/ft_split.c pipelib/ft_strchr.c
 HEADER		= include/pipex.h
 RM			= rm -rf
 NAME		= pipex
 CC			= gcc
 OBJECTS		= ${SRCS:.c=.o} ${LIB:.c=.o}
-CFLAGS		= -Wall -Werror -Wextra
+CFLAGS		= -Wall -Werror -Wextra 
 
 ${NAME}:	${HEAD} ${OBJECTS}
 	${CC} ${CFLAGS} -o ${NAME} ${OBJECTS}
