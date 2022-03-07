@@ -32,13 +32,13 @@ void	multi_pipex(int *filefd, int argc, char **argv, char **envp)
 			dup2(fd_in, STDIN_FILENO);
 			dup2(pipefd[1], STDOUT_FILENO);
 			close(pipefd[0]);
-			externalcommand(argv[i], envp);
+			externalcommand(argv, argv[i], envp);
 		}
 		close(pipefd[1]);
 		fd_in = pipefd[0];
 	}
 	dup2(fd_in, STDIN_FILENO);
-	externalcommand(argv[i], envp);
+	externalcommand(argv, argv[i], envp);
 }
 
 int	inputtest(char **argv, char *input)

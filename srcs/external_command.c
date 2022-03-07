@@ -32,17 +32,34 @@ int	findpathline(char **envp)
 		i++;
 	}
 	write(STDERR_FILENO, "env problem, can't find \"PATH=...\" line\n", 41);
-	exit (EXIT_FAILURE);
+	return (EXIT_FAILURE);
 }
 
-char	*getpath(char *cmd, char **envp)
+char	*getpath(char **argv, char *cmd, char **envp)
 {
 	char	*path;
 
 	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, F_OK) == -1)
+		{
+			printerror(argv, cmd);
+			exit(EXIT_FAILURE);
+		}
+		if (access(cmd, X_OK) == -1)
+		{
+			printerror(argv, cmd);
+			exit(EXIT_FAILURE);
+		}
 		path = cmd;
+	}
 	else
 		path = path_parsing(cmd, envp);
+	if (access(path, F_OK) == 0 && access(path, X_OK) == -1)
+	{
+		printerror(argv, cmd);
+		exit(EXIT_FAILURE);
+	}
 	return (path);
 }
 
@@ -75,36 +92,43 @@ char	*path_parsing(char *cmd, char **envp)
 	return (NULL);
 }
 
-int	testcmd(char *cmd)
+int	ft_strspace(char *str)
 {
 	int	i;
 
 	i = 0;
-	while (cmd[i] == ' ' || cmd[i] == '\0')
+	while (str[i] == ' ' || str[i] == '\0')
 	{
-		if (cmd[i] == '\0')
+		if (str[i] == '\0')
 			return (EXIT_FAILURE);
 		i++;
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	externalcommand(char *cmd, char **envp)
+int	externalcommand(char **argv, char *cmd, char **envp)
 {
 	char	*cmdpath;
 	char	**cmdargs;
 
 	if (cmd[0] == '\0')
+	{
+		access("cmd", X_OK);
+		printerror(argv, cmd);
 		exit(EXIT_FAILURE);
-	if (testcmd(cmd) == EXIT_SUCCESS)
+	}
+	if (ft_strspace(cmd) == EXIT_SUCCESS)
 	{
 		cmdargs = ft_split(cmd, ' ');
-		cmdpath = getpath(cmdargs[0], envp);
-		if (cmdpath != NULL)
+		cmdpath = getpath(argv, cmdargs[0], envp);
+		if (cmdpath)
+		{
 			execve(cmdpath, cmdargs, envp);
-		free(cmdpath);
+			free(cmdpath);
+		}
 		ft_freetab(cmdargs);
 	}
+	printerror(argv, cmd);
 	write(2, "pipex: command not found: ", 26);
 	write(2, cmd, ft_strlen(cmd));
 	write(2, "\n", 1);
