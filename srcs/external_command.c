@@ -128,9 +128,9 @@ int	externalcommand(char **argv, char *cmd, char **envp)
 		}
 		ft_freetab(cmdargs);
 	}
-	printerror(argv, cmd);
-	write(2, "pipex: command not found: ", 26);
-	write(2, cmd, ft_strlen(cmd));
-	write(2, "\n", 1);
+	if (errno == 13)
+		printerror(argv, cmd);
+	else
+		printcfn(argv, cmd);
 	exit (127);
 }

@@ -31,5 +31,6 @@ char			*path_parsing(char *cmd, char **envp);
 int				findpathline(char **envp);
 void			printerror(char **argv, char *prob);
 void			ft_freetab(char **tab);
+void			printcfn(char **argv, char *prob);
 
 #endif

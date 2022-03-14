@@ -24,3 +24,11 @@ void	printerror(char **argv, char *prob)
 	}
 	write(STDERR_FILENO, "\n", 1);
 }
+
+void	printcfn(char **argv, char *prob)
+{
+	write(2, argv[0], ft_strlen(argv[0]));
+	write(2, ": command not found: ", 21);
+	write(2, prob, ft_strlen(prob));
+	write(2, "\n", 1);
+}
