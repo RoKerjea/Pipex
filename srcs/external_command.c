@@ -43,22 +43,21 @@ char	*getpath(char **argv, char *cmd, char **envp)
 	{
 		if (access(cmd, F_OK) == -1)
 		{
-			printerror(argv, cmd);
-			exit(EXIT_FAILURE);
+			printerror2(argv, cmd);
 		}
 		if (access(cmd, X_OK) == -1)
 		{
-			printerror(argv, cmd);
-			exit(EXIT_FAILURE);
+			printerror2(argv, cmd);
 		}
 		path = cmd;
 	}
 	else
 		path = path_parsing(cmd, envp);
+	if (!path)
+		return (NULL);
 	if (access(path, F_OK) == 0 && access(path, X_OK) == -1)
 	{
-		printerror(argv, cmd);
-		exit(EXIT_FAILURE);
+		printerror2(argv, cmd);
 	}
 	return (path);
 }

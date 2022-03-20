@@ -25,6 +25,20 @@ void	printerror(char **argv, char *prob)
 	write(STDERR_FILENO, "\n", 1);
 }
 
+void	printerror2(char **argv, char *prob)
+{
+	write(STDERR_FILENO, argv[0] + 2, ft_strlen(argv[0]) - 2);
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, strerror(errno), ft_strlen(strerror(errno)));
+	if (prob)
+	{
+		write(STDERR_FILENO, ": ", 2);
+		write(STDERR_FILENO, prob, ft_strlen(prob));
+	}
+	write(STDERR_FILENO, "\n", 1);
+	exit(EXIT_FAILURE);
+}
+
 void	printcfn(char **argv, char *prob)
 {
 	write(2, argv[0], ft_strlen(argv[0]));
