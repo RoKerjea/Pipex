@@ -29,7 +29,6 @@ int				ft_strchr(const char *s, char t);
 int				ft_printnbr(int nb);
 int				externalcommand(char **argv, char *cmd, char **envp);
 char			*path_parsing(char *cmd, char **envp, char **argv);
-int				findpathline(char **envp);
 void			printerror(char **argv, char *prob);
 void			printerror2(char **argv, char *prob);
 void			printerror3(char **argv, char *prob);

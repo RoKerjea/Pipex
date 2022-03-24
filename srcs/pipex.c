@@ -55,7 +55,6 @@ void	multi_pipex(int *filefd, int argc, char **argv, char **envp)
 		}
 		close(pipefd[1]);
 		fd_in = pipefd[0];
-		//waitsegft(pid, argv[i]);
 	}
 	dup2(fd_in, STDIN_FILENO);
 	externalcommand(argv, argv[i], envp);

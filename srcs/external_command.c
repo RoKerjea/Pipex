@@ -12,7 +12,7 @@
 
 #include "../include/pipex.h"
 
-int	findpathline(char **envp)
+int	findpathline(char *cmd, char **envp, char **argv)
 {
 	int		i;
 	int		j;
@@ -31,7 +31,7 @@ int	findpathline(char **envp)
 		}
 		i++;
 	}
-	//write(STDERR_FILENO, "env problem, can't find \"PATH=...\" line\n", 41);
+	printerror3(argv, cmd);
 	return (EXIT_FAILURE);
 }
 
@@ -70,9 +70,7 @@ char	*path_parsing(char *cmd, char **envp, char **argv)
 	char	**mypaths;
 	int		i;
 
-	i = findpathline(envp);
-	if (i == EXIT_FAILURE)
-		printerror3(argv, cmd);
+	i = findpathline(cmd, envp, argv);
 	path_from_envp = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5);
 	path_edited = ft_strchr_replace(path_from_envp, ':', "/:");
 	mypaths = ft_split(path_edited, ':');
