@@ -12,6 +12,25 @@
 
 #include "../include/pipex.h"
 
+void	waitsegft(pid_t pid, char *argv)
+{
+	int	status;
+
+	status = 0;
+	waitpid(-1, &status, 0);
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == SIGSEGV)
+		{
+			ft_printnbr(pid);
+			write(STDERR_FILENO, " segmentation fault ", 20);
+			write(STDERR_FILENO, argv, ft_strlen(argv));
+			write(STDERR_FILENO, "\n", 1);
+		}
+	}
+	exit(status);
+}
+
 void	multi_pipex(int *filefd, int argc, char **argv, char **envp)
 {
 	int		pipefd[2];
@@ -36,6 +55,7 @@ void	multi_pipex(int *filefd, int argc, char **argv, char **envp)
 		}
 		close(pipefd[1]);
 		fd_in = pipefd[0];
+		//waitsegft(pid, argv[i]);
 	}
 	dup2(fd_in, STDIN_FILENO);
 	externalcommand(argv, argv[i], envp);
@@ -56,6 +76,16 @@ int	inputtest(char **argv, char *input)
 	return (EXIT_SUCCESS);
 }
 
+void	elderchild(int *filefd, int argc, char **argv, char **envp)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+		multi_pipex(filefd, argc, argv, envp);
+	waitsegft(pid, argv[argc - 2]);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	int	filefd[2];
@@ -72,11 +102,11 @@ int	main(int argc, char **argv, char **envp)
 	filefd[1] = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC,
 			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 	if (filefd[0] < 0 || filefd[1] < 0)
-	{	
+	{
 		printerror(argv, argv[argc - 1]);
 		return (EXIT_FAILURE);
 	}
 	dup2(filefd[1], STDOUT_FILENO);
-	multi_pipex(filefd, argc, argv, envp);
+	elderchild(filefd, argc, argv, envp);
 	return (0);
 }

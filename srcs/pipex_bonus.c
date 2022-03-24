@@ -62,7 +62,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc < 5)
 	{
-		write(1, "Program need at least 4 arguments\n", 34);
+		write(1, "Program need 4 arguments\n", 25);
 		return (EXIT_FAILURE);
 	}
 	if (inputtest(argv, argv[1]) == EXIT_SUCCESS)

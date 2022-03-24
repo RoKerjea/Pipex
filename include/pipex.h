@@ -26,11 +26,13 @@ char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strchr_replace(char *str, char needle, char *stuffing);
 int				ft_strchr(const char *s, char t);
+int				ft_printnbr(int nb);
 int				externalcommand(char **argv, char *cmd, char **envp);
-char			*path_parsing(char *cmd, char **envp);
+char			*path_parsing(char *cmd, char **envp, char **argv);
 int				findpathline(char **envp);
 void			printerror(char **argv, char *prob);
 void			printerror2(char **argv, char *prob);
+void			printerror3(char **argv, char *prob);
 void			ft_freetab(char **tab);
 void			printcfn(char **argv, char *prob);
 

@@ -31,7 +31,7 @@ int	findpathline(char **envp)
 		}
 		i++;
 	}
-	write(STDERR_FILENO, "env problem, can't find \"PATH=...\" line\n", 41);
+	//write(STDERR_FILENO, "env problem, can't find \"PATH=...\" line\n", 41);
 	return (EXIT_FAILURE);
 }
 
@@ -52,8 +52,8 @@ char	*getpath(char **argv, char *cmd, char **envp)
 		path = cmd;
 	}
 	else
-		path = path_parsing(cmd, envp);
-	if (!path)
+		path = path_parsing(cmd, envp, argv);
+	if (path == NULL)
 		return (NULL);
 	if (access(path, F_OK) == 0 && access(path, X_OK) == -1)
 	{
@@ -62,7 +62,7 @@ char	*getpath(char **argv, char *cmd, char **envp)
 	return (path);
 }
 
-char	*path_parsing(char *cmd, char **envp)
+char	*path_parsing(char *cmd, char **envp, char **argv)
 {
 	char	*path_from_envp;
 	char	*path_edited;
@@ -71,6 +71,8 @@ char	*path_parsing(char *cmd, char **envp)
 	int		i;
 
 	i = findpathline(envp);
+	if (i == EXIT_FAILURE)
+		printerror3(argv, cmd);
 	path_from_envp = ft_substr(envp[i], 5, ft_strlen(envp[i]) - 5);
 	path_edited = ft_strchr_replace(path_from_envp, ':', "/:");
 	mypaths = ft_split(path_edited, ':');
