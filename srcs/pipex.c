@@ -89,7 +89,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	int	filefd[2];
 
-	if (argc < 5)
+	if (argc != 5)
 	{
 		write(1, "Program need 4 arguments\n", 25);
 		return (EXIT_FAILURE);
