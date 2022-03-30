@@ -100,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 		filefd[0] = 0;
 	filefd[1] = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC,
 			S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-	if (filefd[0] < 0 || filefd[1] < 0)
+	if (filefd[1] < 0)
 	{
 		printerror(argv, argv[argc - 1]);
 		return (EXIT_FAILURE);
